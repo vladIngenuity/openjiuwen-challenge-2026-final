@@ -27,6 +27,12 @@ class EmpiricalHybrid(ReasonFirstBounded):
     endgame_reserve = 5000.0
     endgame_min_time = 240.0
     endgame_vote_cap = 900.0
+    # A measured output-limit failure is safe to retry once with surplus.
+    # These caps are separate from the conservative first-pass task ceiling.
+    endgame_rescue_enabled = True
+    endgame_rescue_task_cap = 4000.0
+    endgame_rescue_attempt_cap = 2400.0
+    endgame_rescue_model = MODEL_FAST_ALT
     # Both differ from the primary models used by this router. On disagreement
     # the answer changes only if two of the three candidates agree.
     vote_models = (MODEL_FAST_ALT, MODEL_REASON_ALT)

@@ -103,14 +103,18 @@ class StrategyExecutor:
         return tuple(out)
 
     # ---------------------------------------------------------- attempts
-    async def _attempt(self, t, view: TaskView, attempt: int, model: str, cap: float) -> AttemptResult:
+    async def _attempt(self, t, view: TaskView, attempt: int, model: str, cap: float,
+                       *, rescue: bool = False) -> AttemptResult:
         n0, c0, t0 = len(self.h.ledger.log), t.cost, time.time()
         ty = view.type
         kind = "oneshot"
         r = None
         try:
             if ty == "coding":
-                if attempt == 1:
+                if rescue:
+                    r = await L.solve_coding(self.h.llm, t, model=model, attempts=1,
+                                             min_output_tokens=1800)
+                elif attempt == 1:
                     det = t.raw.get("_det")
                     start = det[1] if det and det[0] == "partial" else None
                     r = await L.solve_coding(self.h.llm, t, model=model, start_files=start)
@@ -119,10 +123,12 @@ class StrategyExecutor:
                     r = await L.agent_solve(self.h.llm, t, cap=cap, model=model,
                                             max_steps=getattr(self.s, "max_tool_steps", 12),
                                             stop_repeated=getattr(self.s, "stop_repeated_tools", False))
-            elif ty in ONESHOT and attempt <= 2:
+            elif ty in ONESHOT and (attempt <= 2 or rescue):
                 options = ({"repairs": self.s.execution_repairs}
                            if ty in ("math", "data_analysis") and getattr(self.s, "execution_repairs", 0)
                            else {})
+                if rescue and ty in ("math", "data_analysis"):
+                    options["max_tokens"] = 1800
                 r = await ONESHOT[ty](self.h.llm, t, model=model, **options)
             else:
                 kind = "agent"
@@ -164,7 +170,8 @@ class StrategyExecutor:
                 note = "fix did not verify in place"
         elif r[0] == "infeasible":
             status, note = INFEASIBLE_CLAIMED, r[2] or "model: infeasible"
-        res = AttemptResult(task_id=t.task_id, attempt=attempt, kind=kind, model=model,
+        res = AttemptResult(task_id=t.task_id, attempt=attempt,
+                            kind="rescue" if rescue else kind, model=model,
                             status=status, answer=answer, verify=verify, cost=t.cost - c0,
                             sec=round(time.time() - t0, 2), calls=self._calls_since(n0, t.task_id),
                             note=note[:200])
@@ -235,8 +242,9 @@ class StrategyExecutor:
         """Spend surplus on ranked verification only after the first pass.
 
         This is deliberately opt-in and is not part of Strategy contract v1.
-        It never competes with pending work, never crosses the per-task cap,
-        and preserves both the strategy reserve and the ledger safety reserve.
+        It never competes with pending work.  Truncated responses get a
+        separate bounded rescue ceiling; votes retain the first-pass cap.
+        Both preserve the strategy reserve and the ledger safety reserve.
         """
         if not getattr(self.s, "endgame_enabled", False):
             return
@@ -247,6 +255,9 @@ class StrategyExecutor:
         cap = max(MIN_CAP, float(getattr(
             self.s, "endgame_vote_cap", getattr(self.s, "vote_cap", VOTE_CAP_DEFAULT)
         )))
+        await self._rescue_truncated(reserve, min_time)
+        if self.h.ledger.dead:
+            return
         candidates = [
             t for t in self.h.tasks
             if t.status == ANSWERED_UNVERIFIED
@@ -293,6 +304,68 @@ class StrategyExecutor:
                 checked += 1
         log(f"endgame: checked {checked}/{len(order)}, spent "
             f"{self.h.ledger.spent - start_spent:.0f}, kept {reserve:.0f} reserve")
+
+    async def _rescue_truncated(self, reserve: float, min_time: float) -> None:
+        """Retry measured, truncated outputs once while surplus remains.
+
+        A transport error or unknown usage halts the ledger and can never enter
+        this path.  Each task has one rescue, its own expanded ceiling, and a
+        fresh capped reservation.  Earlier answers are never overwritten here.
+        """
+        if not getattr(self.s, "endgame_rescue_enabled", False):
+            return
+        ceiling = max(TASK_CAP, float(getattr(self.s, "endgame_rescue_task_cap", TASK_CAP)))
+        attempt_cap = max(MIN_CAP, float(getattr(self.s, "endgame_rescue_attempt_cap", MIN_CAP)))
+        candidates = []
+        for t in self.h.tasks:
+            if t.status != FAILED or self.view(t).type not in (*ONESHOT, "coding"):
+                continue
+            last = next((a for a in reversed(self.history)
+                         if a.task_id == t.task_id and a.kind != "vote"), None)
+            if (last is None or last.status != FAILED or not last.calls
+                    or any(a.task_id == t.task_id and a.kind == "rescue"
+                           for a in self.history)
+                    or "output cap: truncated response" not in last.note
+                    or any(c.accounting != "usage" or c.error for c in last.calls)):
+                continue
+            candidates.append((t, last))
+        candidates.sort(key=lambda pair: (-pair[0].reward, pair[0].task_id))
+        rescued = 0
+        start_spent = self.h.ledger.spent
+        for t, last in candidates:
+            available = max(0.0, self.h.ledger.usable() - reserve)
+            if (self.h.ledger.dead or self.h.time_left() < min_time
+                    or available < MIN_CAP):
+                break
+            allowance = min(attempt_cap, ceiling - t.cost, available)
+            if allowance < MIN_CAP:
+                continue
+            view = self.view(t)
+            # A no-reasoning alternate makes room for a complete response when
+            # the first reasoning model exhausted its output allocation.
+            model = getattr(self.s, "endgame_rescue_model", MODEL_FAST)
+            if model in self.h.llm.bad_models:
+                model = MODEL_FAST
+            try:
+                with cap_scope(allowance):
+                    result = await self._attempt(t, view, last.attempt + 1, model,
+                                                 allowance, rescue=True)
+            except Exception as error:  # noqa: BLE001 - preserve other tasks
+                log(f"{t.task_id}: endgame rescue failed: {error}")
+                continue
+            if self.h.ledger.dead:
+                self.h.mark(t, SKIPPED, result.note or "infrastructure halt")
+                break
+            if result.status == SKIPPED:
+                continue
+            self.history.append(result)
+            rescued += 1
+            if result.status == INFEASIBLE_CLAIMED:
+                self.h.mark(t, INFEASIBLE_CLAIMED, result.note)
+            elif result.status == FAILED:
+                self.h.mark(t, FAILED, result.note or "rescue failed")
+        log(f"endgame: rescued {rescued}/{len(candidates)}, spent "
+            f"{self.h.ledger.spent - start_spent:.0f}")
 
     async def _diagnose(self, t, view: TaskView) -> None:
         """Short LLM feasibility/cost check, charged with tag plan:<id>."""
