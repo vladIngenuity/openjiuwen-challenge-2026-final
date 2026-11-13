@@ -6,7 +6,7 @@
 Отсутствующий docstring указан явно, чтобы не выдавать догадку за контракт.
 Внешние зависимости, тесты, сгенерированные корпуса и старые резервные копии
 в справочник не входят. Ссылка на строку ведёт к определению в GitHub.
-Всего определений: **335**.
+Всего определений: **336**.
 
 ## `run_agent.py`
 
@@ -54,15 +54,16 @@
 - [`StrategyExecutor._defer(self, task_id: str, why: str) -> None`](../../harness/executor.py#L82) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
 - [`StrategyExecutor._elapsed() -> float`](../../harness/executor.py#L87) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
 - [`StrategyExecutor._calls_since(self, n0: int, task_id: str) -> tuple[Call, ...]`](../../harness/executor.py#L91) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`async StrategyExecutor._attempt(self, t, view: TaskView, attempt: int, model: str, cap: float) -> AttemptResult`](../../harness/executor.py#L106) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`StrategyExecutor._task_left(t) -> float`](../../harness/executor.py#L181) — Remaining aggregate task budget across attempts, votes and diagnosis.
-- [`async StrategyExecutor._vote(self, t, view: TaskView, first: AttemptResult, *, cap: float | None=None) -> AttemptResult | None`](../../harness/executor.py#L190) — Independent second opinion; change the answer only on a 2-of-3 majority.
-- [`async StrategyExecutor._run_endgame(self) -> None`](../../harness/executor.py#L234) — Spend surplus on ranked verification only after the first pass.
-- [`async StrategyExecutor._diagnose(self, t, view: TaskView) -> None`](../../harness/executor.py#L297) — Short LLM feasibility/cost check, charged with tag plan:<id>.
-- [`async StrategyExecutor._process(self, t) -> None`](../../harness/executor.py#L321) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`StrategyExecutor._stop(self) -> bool`](../../harness/executor.py#L378) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`async StrategyExecutor._worker(self, wid: int) -> None`](../../harness/executor.py#L381) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`async StrategyExecutor.run(self) -> None`](../../harness/executor.py#L406) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`async StrategyExecutor._attempt(self, t, view: TaskView, attempt: int, model: str, cap: float, *, rescue: bool=False) -> AttemptResult`](../../harness/executor.py#L106) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`StrategyExecutor._task_left(t) -> float`](../../harness/executor.py#L188) — Remaining aggregate task budget across attempts, votes and diagnosis.
+- [`async StrategyExecutor._vote(self, t, view: TaskView, first: AttemptResult, *, cap: float | None=None) -> AttemptResult | None`](../../harness/executor.py#L197) — Independent second opinion; change the answer only on a 2-of-3 majority.
+- [`async StrategyExecutor._run_endgame(self) -> None`](../../harness/executor.py#L241) — Spend surplus on ranked verification only after the first pass.
+- [`async StrategyExecutor._rescue_truncated(self, reserve: float, min_time: float) -> None`](../../harness/executor.py#L308) — Retry measured, truncated outputs once while surplus remains.
+- [`async StrategyExecutor._diagnose(self, t, view: TaskView) -> None`](../../harness/executor.py#L369) — Short LLM feasibility/cost check, charged with tag plan:<id>.
+- [`async StrategyExecutor._process(self, t) -> None`](../../harness/executor.py#L393) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`StrategyExecutor._stop(self) -> bool`](../../harness/executor.py#L450) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`async StrategyExecutor._worker(self, wid: int) -> None`](../../harness/executor.py#L453) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`async StrategyExecutor.run(self) -> None`](../../harness/executor.py#L478) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
 
 ## `harness/llm.py`
 
@@ -95,21 +96,21 @@
 - [`is_infeasible(text: str) -> bool`](../../harness/llm_solvers.py#L53) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
 - [`async _code_answer(llm: LLM, task, user: str, cwd: Path, model: str, max_tokens: int, tag: str, repairs: int=0)`](../../harness/llm_solvers.py#L64) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
 - [`_det_hint(task) -> str`](../../harness/llm_solvers.py#L101) — A maybe_infeasible signal from the deterministic phase (e.g. a declared
-- [`async solve_math(llm: LLM, task, model=MODEL_FAST, repairs: int=0)`](../../harness/llm_solvers.py#L113) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`async solve_data(llm: LLM, task, model=MODEL_FAST, repairs: int=0)`](../../harness/llm_solvers.py#L122) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`async solve_search(llm: LLM, task, model=MODEL_FAST)`](../../harness/llm_solvers.py#L142) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`async solve_coding(llm: LLM, task, model=MODEL_FAST, attempts: int=2, start_files: dict | None=None)`](../../harness/llm_solvers.py#L168) — One-shot whole-file repair with test feedback.
-- [`_inside(p: Path, root: Path) -> bool`](../../harness/llm_solvers.py#L229) — True if p (after resolving symlinks and ..) lies within root.
-- [`check_shell(command: str) -> str | None`](../../harness/llm_solvers.py#L242) — Reject anything but read-only inspection pipelines inside the workspace.
-- [`_make_tools(cwd: Path, state: dict)`](../../harness/llm_solvers.py#L261) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`_make_tools.list_files(path: str='.') -> str`](../../harness/llm_solvers.py#L262) — List files under a directory (relative).
-- [`_make_tools.read_file(path: str, max_chars: int=4000) -> str`](../../harness/llm_solvers.py#L270) — Read a text file (relative path).
-- [`_make_tools.write_file(path: str, content: str) -> str`](../../harness/llm_solvers.py#L277) — Overwrite a text file (relative path).
-- [`_make_tools.run_python(code: str) -> str`](../../harness/llm_solvers.py#L287) — Run a Python 3 snippet in the directory and return stdout/stderr.
-- [`_make_tools.run_shell(command: str) -> str`](../../harness/llm_solvers.py#L292) — Run a read-only shell command (ls, grep, cat, head, wc, python3 file.py ...).
-- [`_make_tools.submit(answer: str) -> str`](../../harness/llm_solvers.py#L300) — Submit the final answer.
-- [`_schemas(funcs: dict)`](../../harness/llm_solvers.py#L309) — Tool schemas; built through openJiuwen's @tool when available.
-- [`async agent_solve(llm: LLM, task, cap: float, model=MODEL_FAST, max_steps: int=12, stop_repeated: bool=False)`](../../harness/llm_solvers.py#L341) — Generic tool-using agent with a hard per-task token cap. Context is kept
+- [`async solve_math(llm: LLM, task, model=MODEL_FAST, repairs: int=0, max_tokens: int=350)`](../../harness/llm_solvers.py#L113) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`async solve_data(llm: LLM, task, model=MODEL_FAST, repairs: int=0, max_tokens: int=450)`](../../harness/llm_solvers.py#L123) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`async solve_search(llm: LLM, task, model=MODEL_FAST)`](../../harness/llm_solvers.py#L145) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`async solve_coding(llm: LLM, task, model=MODEL_FAST, attempts: int=2, start_files: dict | None=None, min_output_tokens: int=0)`](../../harness/llm_solvers.py#L171) — One-shot whole-file repair with test feedback.
+- [`_inside(p: Path, root: Path) -> bool`](../../harness/llm_solvers.py#L233) — True if p (after resolving symlinks and ..) lies within root.
+- [`check_shell(command: str) -> str | None`](../../harness/llm_solvers.py#L246) — Reject anything but read-only inspection pipelines inside the workspace.
+- [`_make_tools(cwd: Path, state: dict)`](../../harness/llm_solvers.py#L265) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`_make_tools.list_files(path: str='.') -> str`](../../harness/llm_solvers.py#L266) — List files under a directory (relative).
+- [`_make_tools.read_file(path: str, max_chars: int=4000) -> str`](../../harness/llm_solvers.py#L274) — Read a text file (relative path).
+- [`_make_tools.write_file(path: str, content: str) -> str`](../../harness/llm_solvers.py#L281) — Overwrite a text file (relative path).
+- [`_make_tools.run_python(code: str) -> str`](../../harness/llm_solvers.py#L291) — Run a Python 3 snippet in the directory and return stdout/stderr.
+- [`_make_tools.run_shell(command: str) -> str`](../../harness/llm_solvers.py#L296) — Run a read-only shell command (ls, grep, cat, head, wc, python3 file.py ...).
+- [`_make_tools.submit(answer: str) -> str`](../../harness/llm_solvers.py#L304) — Submit the final answer.
+- [`_schemas(funcs: dict)`](../../harness/llm_solvers.py#L313) — Tool schemas; built through openJiuwen's @tool when available.
+- [`async agent_solve(llm: LLM, task, cap: float, model=MODEL_FAST, max_steps: int=12, stop_repeated: bool=False)`](../../harness/llm_solvers.py#L345) — Generic tool-using agent with a hard per-task token cap. Context is kept
 
 ## `harness/log.py`
 
@@ -290,12 +291,12 @@
 
 ## `harness/strategies/empirical_hybrid.py`
 
-- [`EmpiricalHybrid.p_success(self, task: TaskView, state: RunState) -> float`](../../harness/strategies/empirical_hybrid.py#L62) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`EmpiricalHybrid.cost(self, task: TaskView, state: RunState) -> float`](../../harness/strategies/empirical_hybrid.py#L65) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`EmpiricalHybrid.order(self, tasks: list[TaskView], state: RunState) -> list[str]`](../../harness/strategies/empirical_hybrid.py#L68) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`EmpiricalHybrid.budget_for(self, task: TaskView, state: RunState) -> float`](../../harness/strategies/empirical_hybrid.py#L83) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`EmpiricalHybrid.model_for(self, task: TaskView, state: RunState, attempt: int) -> str`](../../harness/strategies/empirical_hybrid.py#L88) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`EmpiricalHybrid.endgame_order(self, tasks: list[TaskView], state: RunState) -> list[str]`](../../harness/strategies/empirical_hybrid.py#L95) — Highest expected correction value per unit of verification first.
+- [`EmpiricalHybrid.p_success(self, task: TaskView, state: RunState) -> float`](../../harness/strategies/empirical_hybrid.py#L68) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`EmpiricalHybrid.cost(self, task: TaskView, state: RunState) -> float`](../../harness/strategies/empirical_hybrid.py#L71) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`EmpiricalHybrid.order(self, tasks: list[TaskView], state: RunState) -> list[str]`](../../harness/strategies/empirical_hybrid.py#L74) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`EmpiricalHybrid.budget_for(self, task: TaskView, state: RunState) -> float`](../../harness/strategies/empirical_hybrid.py#L89) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`EmpiricalHybrid.model_for(self, task: TaskView, state: RunState, attempt: int) -> str`](../../harness/strategies/empirical_hybrid.py#L94) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`EmpiricalHybrid.endgame_order(self, tasks: list[TaskView], state: RunState) -> list[str]`](../../harness/strategies/empirical_hybrid.py#L101) — Highest expected correction value per unit of verification first.
 
 ## `harness/strategies/fixed_models.py`
 

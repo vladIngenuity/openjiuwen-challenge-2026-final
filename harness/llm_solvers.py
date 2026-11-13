@@ -110,16 +110,18 @@ def _det_hint(task) -> str:
             "answered exactly from the data as it is, the program must print INFEASIBLE.")
 
 
-async def solve_math(llm: LLM, task, model=MODEL_FAST, repairs: int = 0):
+async def solve_math(llm: LLM, task, model=MODEL_FAST, repairs: int = 0,
+                     max_tokens: int = 350):
     cwd = sandbox.scratch_copy(task.ws)
     try:
         return await _code_answer(llm, task, clean_instruction(task.instruction), cwd,
-                                  model, 350, f"math:{task.task_id}", repairs=repairs)
+                                  model, max_tokens, f"math:{task.task_id}", repairs=repairs)
     finally:
         shutil.rmtree(cwd, ignore_errors=True)
 
 
-async def solve_data(llm: LLM, task, model=MODEL_FAST, repairs: int = 0):
+async def solve_data(llm: LLM, task, model=MODEL_FAST, repairs: int = 0,
+                     max_tokens: int = 450):
     cwd = sandbox.scratch_copy(task.ws)
     try:
         files = [p for p in sorted(cwd.rglob("*")) if p.is_file() and not p.name.startswith(".")]
@@ -134,7 +136,8 @@ async def solve_data(llm: LLM, task, model=MODEL_FAST, repairs: int = 0):
                 "\n\nRead the files with the csv/json modules (no pandas). Values are "
                 "strings: convert carefully. Print only the answer.")
         user += _det_hint(task)
-        return await _code_answer(llm, task, user, cwd, model, 450, f"data:{task.task_id}", repairs=repairs)
+        return await _code_answer(llm, task, user, cwd, model, max_tokens,
+                                  f"data:{task.task_id}", repairs=repairs)
     finally:
         shutil.rmtree(cwd, ignore_errors=True)
 
@@ -166,7 +169,8 @@ SYS_FIX = ("You fix bugs in Python code so that the tests pass and the functions
 
 
 async def solve_coding(llm: LLM, task, model=MODEL_FAST, attempts: int = 2,
-                       start_files: dict | None = None):
+                       start_files: dict | None = None,
+                       min_output_tokens: int = 0):
     """One-shot whole-file repair with test feedback."""
     test_file, targets = coding_solver.locate(task.instruction, task.ws)
     if test_file is None or not targets:
@@ -192,7 +196,7 @@ async def solve_coding(llm: LLM, task, model=MODEL_FAST, attempts: int = 2,
             src = (cwd / target).read_text(encoding="utf-8")
             user = (f"Task: {clean_instruction(task.instruction)}\n\nFile {target.as_posix()}:\n```python\n{src}\n```\n\nTests {test_file.name}:\n"
                     f"```python\n{test_src[:4000]}\n```\n\nRelated modules:\n{context}\n\nTest output:\n```\n{out[-1800:]}\n```")
-            max_t = min(3000, int(len(src) / 2.5) + 300)
+            max_t = max(min_output_tokens, min(3000, int(len(src) / 2.5) + 300))
             r = await llm.chat([{"role": "system", "content": SYS_FIX},
                                 {"role": "user", "content": user}],
                                model=model, max_tokens=max_t,

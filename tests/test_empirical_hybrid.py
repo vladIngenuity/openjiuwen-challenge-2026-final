@@ -5,7 +5,7 @@ from harness.executor import StrategyExecutor
 from harness.llm import (MODEL_FAST, MODEL_FAST_ALT, MODEL_REASON,
                          MODEL_REASON_ALT)
 from harness.strategies import get
-from harness.strategy import FAILED, AttemptResult, RunState, TaskView
+from harness.strategy import FAILED, ANSWERED_UNVERIFIED, AttemptResult, Call, RunState, TaskView
 
 
 def state(**changes):
@@ -158,3 +158,44 @@ class EndgameExecutorTests(unittest.IsolatedAsyncioTestCase):
 
         self.assertEqual(called, [("search", 300), ("math", 300)])
         self.assertEqual(len(executor.history), 4)
+
+    async def test_surplus_rescues_only_measured_truncation_once(self):
+        truncated = self.task("truncated", "math", 5, status=FAILED)
+        uncertain = self.task("uncertain", "math", 5, status=FAILED)
+        other = self.task("other", "math", 5, status=FAILED)
+        for task in (truncated, uncertain, other):
+            task.cost = 1300.0
+        harness = self.harness([truncated, uncertain, other], usable=10000)
+        executor = StrategyExecutor(harness, get("empirical_hybrid"))
+        executor.view = lambda task: TaskView(
+            task.task_id, task.task_type, task.reward, "exact_str"
+        )
+        measured = Call("model", "raw", 100, 1290, 0, 1300, 1,
+                        "math:truncated", "", "usage", "length")
+        ambiguous = Call("model", "raw", 0, 0, 0, 1300, 1,
+                         "math:uncertain", "timeout", "uncertain_full_reservation")
+        executor.history = [
+            AttemptResult("truncated", 1, "oneshot", "model", FAILED, None,
+                          "none", 1300, 1, (measured,),
+                          "output cap: truncated response"),
+            AttemptResult("uncertain", 1, "oneshot", "model", FAILED, None,
+                          "none", 1300, 1, (ambiguous,),
+                          "output cap: truncated response"),
+            AttemptResult("other", 1, "oneshot", "model", FAILED, None,
+                          "none", 1300, 1, (measured,), "no result"),
+        ]
+        called = []
+
+        async def fake_attempt(task, view, attempt, model, cap, *, rescue=False):
+            called.append((task.task_id, attempt, model, cap, rescue))
+            task.status = ANSWERED_UNVERIFIED
+            return AttemptResult(task.task_id, attempt, "rescue", model,
+                                 ANSWERED_UNVERIFIED, "42", "none", 100, 1)
+
+        executor._attempt = fake_attempt
+        await executor._rescue_truncated(5000, 240)
+        self.assertEqual(called, [
+            ("truncated", 2, executor.s.endgame_rescue_model, 2400.0, True)
+        ])
+        await executor._rescue_truncated(5000, 240)
+        self.assertEqual(len(called), 1)
