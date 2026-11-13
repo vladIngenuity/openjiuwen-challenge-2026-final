@@ -6,7 +6,7 @@ from harness.executor import ONESHOT, StrategyExecutor
 from harness.llm import (MODEL_FAST, MODEL_FAST_ALT, MODEL_REASON,
                          MODEL_REASON_ALT)
 from harness.strategies import get
-from harness.strategy import FAILED, ANSWERED_UNVERIFIED, AttemptResult, Call, RunState, TaskView
+from harness.strategy import FAILED, ANSWERED_UNVERIFIED, SKIPPED, AttemptResult, Call, RunState, TaskView
 
 
 def state(**changes):
@@ -219,3 +219,28 @@ class EndgameExecutorTests(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(result.kind, "rescue")
         self.assertEqual(solve.await_args.kwargs["max_tokens"], 1800)
         self.assertEqual(solve.await_args.kwargs["repairs"], 1)
+
+    async def test_uncertain_rescue_stops_and_persists_charge(self):
+        task = self.task("truncated", "math", 5, status=FAILED)
+        task.cost = 1300.0
+        harness = self.harness([task], usable=10000)
+        marked = []
+        harness.mark = lambda t, status, note: marked.append((status, note))
+        executor = StrategyExecutor(harness, get("empirical_hybrid"))
+        executor.view = lambda t: TaskView(t.task_id, t.task_type, t.reward,
+                                           "exact_str")
+        measured = Call("model", "raw", 100, 1290, 0, 1300, 1,
+                        "math:truncated", "", "usage", "length")
+        executor.history = [AttemptResult(
+            "truncated", 1, "oneshot", "model", FAILED, None, "none",
+            1300, 1, (measured,), "output cap: truncated response")]
+
+        async def uncertain(*args, **kwargs):
+            harness.ledger.dead = True
+            return AttemptResult("truncated", 2, "rescue", "model", SKIPPED,
+                                 None, "none", 2400, 1, note="uncertain_usage")
+
+        executor._attempt = uncertain
+        await executor._rescue_truncated(5000, 240)
+        self.assertEqual(marked, [(SKIPPED, "uncertain_usage")])
+        self.assertEqual(len(executor.history), 1)

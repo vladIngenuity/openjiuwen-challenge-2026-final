@@ -59,11 +59,11 @@
 - [`async StrategyExecutor._vote(self, t, view: TaskView, first: AttemptResult, *, cap: float | None=None) -> AttemptResult | None`](../../harness/executor.py#L197) — Independent second opinion; change the answer only on a 2-of-3 majority.
 - [`async StrategyExecutor._run_endgame(self) -> None`](../../harness/executor.py#L241) — Spend surplus on ranked verification only after the first pass.
 - [`async StrategyExecutor._rescue_truncated(self, reserve: float, min_time: float) -> None`](../../harness/executor.py#L308) — Retry measured, truncated outputs once while surplus remains.
-- [`async StrategyExecutor._diagnose(self, t, view: TaskView) -> None`](../../harness/executor.py#L369) — Short LLM feasibility/cost check, charged with tag plan:<id>.
-- [`async StrategyExecutor._process(self, t) -> None`](../../harness/executor.py#L393) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`StrategyExecutor._stop(self) -> bool`](../../harness/executor.py#L450) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`async StrategyExecutor._worker(self, wid: int) -> None`](../../harness/executor.py#L453) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
-- [`async StrategyExecutor.run(self) -> None`](../../harness/executor.py#L478) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`async StrategyExecutor._diagnose(self, t, view: TaskView) -> None`](../../harness/executor.py#L370) — Short LLM feasibility/cost check, charged with tag plan:<id>.
+- [`async StrategyExecutor._process(self, t) -> None`](../../harness/executor.py#L394) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`StrategyExecutor._stop(self) -> bool`](../../harness/executor.py#L451) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`async StrategyExecutor._worker(self, wid: int) -> None`](../../harness/executor.py#L454) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
+- [`async StrategyExecutor.run(self) -> None`](../../harness/executor.py#L479) — Описание в docstring отсутствует; сигнатура и реализация доступны по ссылке.
 
 ## `harness/llm.py`
 

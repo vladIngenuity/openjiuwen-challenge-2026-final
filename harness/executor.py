@@ -354,6 +354,7 @@ class StrategyExecutor:
                 log(f"{t.task_id}: endgame rescue failed: {error}")
                 continue
             if self.h.ledger.dead:
+                self.h.mark(t, SKIPPED, result.note or "infrastructure halt")
                 break
             if result.status == SKIPPED:
                 continue
