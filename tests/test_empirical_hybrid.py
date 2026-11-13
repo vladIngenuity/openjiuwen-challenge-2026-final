@@ -1,7 +1,8 @@
 import unittest
 from types import SimpleNamespace
+from unittest.mock import AsyncMock, patch
 
-from harness.executor import StrategyExecutor
+from harness.executor import ONESHOT, StrategyExecutor
 from harness.llm import (MODEL_FAST, MODEL_FAST_ALT, MODEL_REASON,
                          MODEL_REASON_ALT)
 from harness.strategies import get
@@ -199,3 +200,22 @@ class EndgameExecutorTests(unittest.IsolatedAsyncioTestCase):
         ])
         await executor._rescue_truncated(5000, 240)
         self.assertEqual(len(called), 1)
+
+    async def test_rescue_requests_larger_complete_answer(self):
+        task = self.task("math", "math", 5, status=FAILED)
+        task.cost = 1300.0
+        harness = self.harness([task], usable=10000)
+        harness._calls_for = lambda _: []
+        harness.accept_answer = lambda t, answer, solver, verify: setattr(
+            t, "status", ANSWERED_UNVERIFIED)
+        executor = StrategyExecutor(harness, get("empirical_hybrid"))
+        view = TaskView("math", "math", 5, "exact_str")
+        solve = AsyncMock(return_value=("answer", "42", "code"))
+        with patch.dict(ONESHOT, {"math": solve}):
+            result = await executor._attempt(task, view, 2,
+                                             executor.s.endgame_rescue_model,
+                                             2400, rescue=True)
+        self.assertEqual(result.status, ANSWERED_UNVERIFIED)
+        self.assertEqual(result.kind, "rescue")
+        self.assertEqual(solve.await_args.kwargs["max_tokens"], 1800)
+        self.assertEqual(solve.await_args.kwargs["repairs"], 1)
