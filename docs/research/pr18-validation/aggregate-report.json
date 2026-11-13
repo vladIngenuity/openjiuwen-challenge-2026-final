@@ -1,0 +1,475 @@
+{
+  "schema_version": 1,
+  "batch": "batch-022",
+  "source_pr": 18,
+  "source_sha": "f4d8b2fec90139998bdaffdc5e66ee4288e3d4e1",
+  "base_sha": "d90b7979cfdf707ceba387e12417527e35253991",
+  "public_sha256": "b56eed45a35eb7a33661bf1eb51e7922e7bdeb77ad31eb2c7a6b801488b65e40",
+  "runs": [
+    {
+      "variant": "baseline",
+      "wall_seconds": 134.64229944901308,
+      "returncode": 0,
+      "statuses": {
+        "verified": 6
+      },
+      "spent": 0.0,
+      "model_calls": 0
+    },
+    {
+      "variant": "pr18-default",
+      "wall_seconds": 44.206289568013744,
+      "returncode": 0,
+      "statuses": {
+        "verified": 6,
+        "skipped": 94
+      },
+      "spent": 0.0,
+      "model_calls": 0
+    },
+    {
+      "variant": "pr18-12s",
+      "wall_seconds": 24.8165850850055,
+      "returncode": 0,
+      "statuses": {
+        "verified": 4,
+        "skipped": 96
+      },
+      "spent": 0.0,
+      "model_calls": 0
+    },
+    {
+      "source_code_sha256": "e48f007aefaa16a2efd0f5aec5478eb0639513249f9084405d329d58156142b9",
+      "public_sha256": "b56eed45a35eb7a33661bf1eb51e7922e7bdeb77ad31eb2c7a6b801488b65e40",
+      "batch": "batch-022",
+      "tasks": 100,
+      "wall_seconds": 45.212603530992055,
+      "returncode": 0,
+      "statuses": {
+        "verified": 6,
+        "skipped": 94,
+        "unreported_pending": 0
+      },
+      "model_calls": 0,
+      "spent": 0,
+      "det_task_seconds": 30,
+      "det_phase_seconds": 90,
+      "private_access": false,
+      "isolation": "strict",
+      "variant": "followup-final"
+    }
+  ],
+  "controls": {
+    "coding_tasks": 25,
+    "reference_public_pass": 25,
+    "reference_hidden_pass": 25,
+    "original_hidden_pass": 0,
+    "positive_controls_valid": true
+  },
+  "privacy": {
+    "model_calls": 0,
+    "api_key_reads": false,
+    "collector_changes": false,
+    "final_holdout_access": false,
+    "private_sources_published": false
+  },
+  "variants": {
+    "baseline": {
+      "schema_version": 1,
+      "private_archive_sha256": "f0c338fb728eb8369e95bfc10eaee2a5bb03a0fc40738b6a1f9e8d99d451d789",
+      "model_calls": 0,
+      "verification": "separate grading process; hidden assertions never model input",
+      "totals": {
+        "tasks": 100,
+        "internally_verified": 6,
+        "feasible": 80,
+        "infeasible": 20,
+        "infeasible_claims": 0,
+        "false_infeasible": 0,
+        "public_pass": 6,
+        "hidden_pass": 1,
+        "max_reward": 421.0,
+        "true_correct": 1,
+        "true_reward": 10.0,
+        "unresolved_feasible": 79,
+        "false_internal_verified": 5,
+        "skipped_or_unreported": 94,
+        "correct_infeasible": 0,
+        "skipped_infeasible": 20
+      },
+      "per_type": {
+        "coding": {
+          "tasks": 25,
+          "internally_verified": 6,
+          "feasible": 25,
+          "infeasible": 0,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "public_pass": 6,
+          "hidden_pass": 1,
+          "max_reward": 138.0,
+          "true_correct": 1,
+          "true_reward": 10.0,
+          "unresolved_feasible": 24,
+          "false_internal_verified": 5,
+          "skipped_or_unreported": 19
+        },
+        "data_analysis": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 18,
+          "infeasible": 7,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 92.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 18,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 7
+        },
+        "math": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 19,
+          "infeasible": 6,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 101.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 19,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 6
+        },
+        "search": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 18,
+          "infeasible": 7,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 90.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 18,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 7
+        }
+      },
+      "limitations": [
+        "Passing tests is evidence for this finite suite, not proof for every input.",
+        "The completion protocol rejects stdout/early-exit spoofing and basic framework tampering; arbitrary in-process Python remains outside a complete hostile-code trust boundary."
+      ]
+    },
+    "pr18-default": {
+      "schema_version": 1,
+      "private_archive_sha256": "f0c338fb728eb8369e95bfc10eaee2a5bb03a0fc40738b6a1f9e8d99d451d789",
+      "model_calls": 0,
+      "verification": "separate grading process; hidden assertions never model input",
+      "totals": {
+        "tasks": 100,
+        "internally_verified": 6,
+        "feasible": 80,
+        "infeasible": 20,
+        "infeasible_claims": 0,
+        "false_infeasible": 0,
+        "public_pass": 6,
+        "hidden_pass": 1,
+        "max_reward": 421.0,
+        "true_correct": 1,
+        "true_reward": 10.0,
+        "unresolved_feasible": 79,
+        "false_internal_verified": 5,
+        "skipped_or_unreported": 94,
+        "correct_infeasible": 0,
+        "skipped_infeasible": 20
+      },
+      "per_type": {
+        "coding": {
+          "tasks": 25,
+          "internally_verified": 6,
+          "feasible": 25,
+          "infeasible": 0,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "public_pass": 6,
+          "hidden_pass": 1,
+          "max_reward": 138.0,
+          "true_correct": 1,
+          "true_reward": 10.0,
+          "unresolved_feasible": 24,
+          "false_internal_verified": 5,
+          "skipped_or_unreported": 19
+        },
+        "data_analysis": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 18,
+          "infeasible": 7,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 92.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 18,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 7
+        },
+        "math": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 19,
+          "infeasible": 6,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 101.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 19,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 6
+        },
+        "search": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 18,
+          "infeasible": 7,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 90.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 18,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 7
+        }
+      },
+      "limitations": [
+        "Passing tests is evidence for this finite suite, not proof for every input.",
+        "The completion protocol rejects stdout/early-exit spoofing and basic framework tampering; arbitrary in-process Python remains outside a complete hostile-code trust boundary."
+      ]
+    },
+    "pr18-12s": {
+      "schema_version": 1,
+      "private_archive_sha256": "f0c338fb728eb8369e95bfc10eaee2a5bb03a0fc40738b6a1f9e8d99d451d789",
+      "model_calls": 0,
+      "verification": "separate grading process; hidden assertions never model input",
+      "totals": {
+        "tasks": 100,
+        "internally_verified": 4,
+        "feasible": 80,
+        "infeasible": 20,
+        "infeasible_claims": 0,
+        "false_infeasible": 0,
+        "public_pass": 4,
+        "hidden_pass": 0,
+        "max_reward": 421.0,
+        "true_correct": 0,
+        "true_reward": 0,
+        "unresolved_feasible": 80,
+        "false_internal_verified": 4,
+        "skipped_or_unreported": 96,
+        "correct_infeasible": 0,
+        "skipped_infeasible": 20
+      },
+      "per_type": {
+        "coding": {
+          "tasks": 25,
+          "internally_verified": 4,
+          "feasible": 25,
+          "infeasible": 0,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "public_pass": 4,
+          "hidden_pass": 0,
+          "max_reward": 138.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 25,
+          "false_internal_verified": 4,
+          "skipped_or_unreported": 21
+        },
+        "data_analysis": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 18,
+          "infeasible": 7,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 92.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 18,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 7
+        },
+        "math": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 19,
+          "infeasible": 6,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 101.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 19,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 6
+        },
+        "search": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 18,
+          "infeasible": 7,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 90.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 18,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 7
+        }
+      },
+      "limitations": [
+        "Passing tests is evidence for this finite suite, not proof for every input.",
+        "The completion protocol rejects stdout/early-exit spoofing and basic framework tampering; arbitrary in-process Python remains outside a complete hostile-code trust boundary."
+      ]
+    },
+    "followup-final": {
+      "schema_version": 1,
+      "private_archive_sha256": "f0c338fb728eb8369e95bfc10eaee2a5bb03a0fc40738b6a1f9e8d99d451d789",
+      "model_calls": 0,
+      "verification": "separate grading process; hidden assertions never model input",
+      "totals": {
+        "tasks": 100,
+        "internally_verified": 6,
+        "feasible": 80,
+        "infeasible": 20,
+        "infeasible_claims": 0,
+        "false_infeasible": 0,
+        "public_pass": 6,
+        "hidden_pass": 1,
+        "max_reward": 421.0,
+        "true_correct": 1,
+        "true_reward": 10.0,
+        "unresolved_feasible": 79,
+        "false_internal_verified": 5,
+        "skipped_or_unreported": 94,
+        "correct_infeasible": 0,
+        "skipped_infeasible": 20
+      },
+      "per_type": {
+        "coding": {
+          "tasks": 25,
+          "internally_verified": 6,
+          "feasible": 25,
+          "infeasible": 0,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "public_pass": 6,
+          "hidden_pass": 1,
+          "max_reward": 138.0,
+          "true_correct": 1,
+          "true_reward": 10.0,
+          "unresolved_feasible": 24,
+          "false_internal_verified": 5,
+          "skipped_or_unreported": 19
+        },
+        "data_analysis": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 18,
+          "infeasible": 7,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 92.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 18,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 7
+        },
+        "math": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 19,
+          "infeasible": 6,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 101.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 19,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 6
+        },
+        "search": {
+          "tasks": 25,
+          "internally_verified": 0,
+          "feasible": 18,
+          "infeasible": 7,
+          "infeasible_claims": 0,
+          "false_infeasible": 0,
+          "max_reward": 90.0,
+          "true_correct": 0,
+          "true_reward": 0,
+          "unresolved_feasible": 18,
+          "false_internal_verified": 0,
+          "skipped_or_unreported": 25,
+          "correct_infeasible": 0,
+          "skipped_infeasible": 7
+        }
+      },
+      "limitations": [
+        "Passing tests is evidence for this finite suite, not proof for every input.",
+        "The completion protocol rejects stdout/early-exit spoofing and basic framework tampering; arbitrary in-process Python remains outside a complete hostile-code trust boundary."
+      ]
+    }
+  },
+  "security_probes": {
+    "before": {
+      "forged_stdout_accepted": true,
+      "sibling_prlimit_changed": true,
+      "stdlib_import_works": true
+    },
+    "same_interpreter_residual": {
+      "frame_introspection_can_forge_completion": true,
+      "scope": "synthetic public fixture only; no private data"
+    },
+    "dependencies_before": {
+      "returncode": 1,
+      "imports_succeeded": false,
+      "isolation": "landlock+seccomp"
+    },
+    "dependencies_after": {
+      "returncode": 0,
+      "imports_succeeded": true,
+      "isolation": "landlock+seccomp"
+    }
+  }
+}

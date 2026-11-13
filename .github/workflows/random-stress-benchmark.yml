@@ -1,0 +1,38 @@
+name: Random vs baseline stress benchmark (mock)
+
+on:
+  push:
+    branches:
+      - vlad/stress-benchmark-random
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-stress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests
+        run: python -m unittest discover -s tests -p 'test_random_baseline.py' -v
+      - name: Mock stress, random calibration on separate seeds
+        run: |
+          python tools/stress_compare.py \
+            --cal-seeds 101,102 \
+            --test-seeds 201,202,203 \
+            --n 60 \
+            --budgets 300,600,1200,2400,4800,7200 \
+            --noise 0.25 \
+            --out docs/research/mock/stress_ci.json
+      - name: Upload scored comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: random-stress-compare
+          path: docs/research/mock/stress_ci.json
+          if-no-files-found: warn

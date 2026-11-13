@@ -1,0 +1,61 @@
+name: Build competition container
+
+on:
+  pull_request:
+    paths:
+      - Dockerfile
+      - .dockerignore
+      - requirements.txt
+      - constraints.txt
+      - run_agent.py
+      - harness/**
+      - tools/selfcheck.py
+      - samples/**
+      - docs/project/**
+      - .github/workflows/container-build.yml
+  workflow_dispatch:
+
+jobs:
+  image:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build linux/amd64 image
+        run: timeout 1000s docker build --platform linux/amd64 -t hack:latest -f Dockerfile .
+      - name: Enforce image size limit
+        run: |
+          bytes=$(docker image inspect hack:latest --format '{{.Size}}')
+          echo "Image bytes: $bytes"
+          test "$bytes" -lt 4000000000
+      - name: Run public offline selfcheck in container
+        run: |
+          # GitHub's hosted runner exposes only two CPUs; the organizer has eight.
+          docker run --rm --platform linux/amd64 --network none \
+            --user 1000:1000 --read-only --tmpfs /tmp:rw,nosuid,nodev,size=2g \
+            --cap-drop ALL --cpus 2 --memory 16g --pids-limit 512 --security-opt no-new-privileges \
+            --entrypoint python hack:latest /app/tools/selfcheck.py
+      - name: Exercise organizer entry point with public task
+        run: |
+          # Keep the organizer's flags except the CPU quota, which this runner cannot provide.
+          mkdir -p "$RUNNER_TEMP/organizer-tasks"
+          cp -a samples/. "$RUNNER_TEMP/organizer-tasks/"
+          # A :rw mount still needs host filesystem permissions for answer.txt.
+          chmod -R a+rwX "$RUNNER_TEMP/organizer-tasks"
+          docker run --rm --platform linux/amd64 --network none \
+            -v "$RUNNER_TEMP/organizer-tasks:/data/tasks:rw" \
+            --read-only --tmpfs /tmp:rw,size=2g -e HOME=/tmp \
+            --cap-drop ALL --security-opt no-new-privileges \
+            --cpus 2 --memory 16g --pids-limit 512 \
+            --workdir /app --entrypoint python \
+            hack:latest /app/run_agent.py --tasks-dir /data/tasks
+          test -f "$RUNNER_TEMP/organizer-tasks/math_0000/answer.txt"
+          test "$(cat "$RUNNER_TEMP/organizer-tasks/math_0000/answer.txt")" = '389'
+      - name: Save complete OCI-compatible Docker image
+        run: docker save hack:latest | gzip -1 > hack-linux-amd64.tar.gz
+      - name: Upload image archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: hack-linux-amd64
+          path: hack-linux-amd64.tar.gz
+          retention-days: 7

@@ -1,0 +1,522 @@
+{
+ "args": {
+  "strategies": "baseline,legacy",
+  "seeds": "1,2,3,4,5",
+  "n": 100,
+  "infeasible": 0.2,
+  "mode": "mock",
+  "budget": 100000,
+  "noise": 0.15,
+  "out": null
+ },
+ "aggregate": {
+  "baseline": {
+   "score_pct": 99.78,
+   "wrong": 1,
+   "answered_infeasible": 6,
+   "spent_avg": 3996.5,
+   "plan_avg": 0.0,
+   "sec_avg": 12.3
+  },
+  "legacy": {
+   "score_pct": 99.42,
+   "wrong": 2,
+   "answered_infeasible": 6,
+   "spent_avg": 3824.1,
+   "plan_avg": 0.0,
+   "sec_avg": 13.5
+  }
+ },
+ "runs": [
+  {
+   "score": 456,
+   "max": 456,
+   "wrong": 0,
+   "answered_infeasible": 2,
+   "infeasible": 21.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "ok": 19.0,
+     "reward": 114.0,
+     "infeasible": 6.0,
+     "inf_skipped": 6.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 20.0,
+     "reward": 112.0,
+     "infeasible": 5.0,
+     "inf_skipped": 3.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "infeasible": 4.0,
+     "inf_skipped": 4.0,
+     "ok": 21.0,
+     "reward": 134.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "ok": 19.0,
+     "reward": 96.0,
+     "infeasible": 6.0,
+     "inf_skipped": 6.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "baseline",
+   "seed": 1,
+   "rc": 0,
+   "sec": 11.4,
+   "spent": 5110.0,
+   "calls": 58,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  },
+  {
+   "score": 449,
+   "max": 456,
+   "wrong": 1,
+   "answered_infeasible": 2,
+   "infeasible": 21.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "ok": 19.0,
+     "reward": 114.0,
+     "infeasible": 6.0,
+     "inf_skipped": 6.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 20.0,
+     "reward": 112.0,
+     "infeasible": 5.0,
+     "inf_skipped": 3.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "infeasible": 4.0,
+     "inf_skipped": 4.0,
+     "ok": 20.0,
+     "reward": 127.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "ok": 19.0,
+     "reward": 96.0,
+     "infeasible": 6.0,
+     "inf_skipped": 6.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "legacy",
+   "seed": 1,
+   "rc": 0,
+   "sec": 13.8,
+   "spent": 5572.7,
+   "calls": 58,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  },
+  {
+   "score": 423,
+   "max": 423,
+   "wrong": 0,
+   "answered_infeasible": 2,
+   "infeasible": 26.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "ok": 20.0,
+     "reward": 121.0,
+     "infeasible": 5.0,
+     "inf_skipped": 5.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 19.0,
+     "reward": 106.0,
+     "infeasible": 6.0,
+     "inf_skipped": 4.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "ok": 17.0,
+     "reward": 109.0,
+     "infeasible": 8.0,
+     "inf_skipped": 8.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "ok": 18.0,
+     "reward": 87.0,
+     "infeasible": 7.0,
+     "inf_skipped": 7.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "baseline",
+   "seed": 2,
+   "rc": 0,
+   "sec": 12.9,
+   "spent": 3258.2,
+   "calls": 53,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  },
+  {
+   "score": 423,
+   "max": 423,
+   "wrong": 0,
+   "answered_infeasible": 2,
+   "infeasible": 26.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "ok": 20.0,
+     "reward": 121.0,
+     "infeasible": 5.0,
+     "inf_skipped": 5.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 19.0,
+     "reward": 106.0,
+     "infeasible": 6.0,
+     "inf_skipped": 4.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "ok": 17.0,
+     "reward": 109.0,
+     "infeasible": 8.0,
+     "inf_skipped": 8.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "ok": 18.0,
+     "reward": 87.0,
+     "infeasible": 7.0,
+     "inf_skipped": 7.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "legacy",
+   "seed": 2,
+   "rc": 0,
+   "sec": 16.7,
+   "spent": 3463.6,
+   "calls": 54,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  },
+  {
+   "score": 497,
+   "max": 497,
+   "wrong": 0,
+   "answered_infeasible": 1,
+   "infeasible": 17.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "infeasible": 5.0,
+     "inf_skipped": 5.0,
+     "ok": 20.0,
+     "reward": 129.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 23.0,
+     "reward": 140.0,
+     "infeasible": 2.0,
+     "inf_skipped": 1.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "ok": 21.0,
+     "reward": 131.0,
+     "infeasible": 4.0,
+     "inf_skipped": 4.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "ok": 19.0,
+     "reward": 97.0,
+     "infeasible": 6.0,
+     "inf_skipped": 6.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "baseline",
+   "seed": 3,
+   "rc": 0,
+   "sec": 10.5,
+   "spent": 3674.6,
+   "calls": 46,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  },
+  {
+   "score": 497,
+   "max": 497,
+   "wrong": 0,
+   "answered_infeasible": 1,
+   "infeasible": 17.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "infeasible": 5.0,
+     "inf_skipped": 5.0,
+     "ok": 20.0,
+     "reward": 129.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 23.0,
+     "reward": 140.0,
+     "infeasible": 2.0,
+     "inf_skipped": 1.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "ok": 21.0,
+     "reward": 131.0,
+     "infeasible": 4.0,
+     "inf_skipped": 4.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "ok": 19.0,
+     "reward": 97.0,
+     "infeasible": 6.0,
+     "inf_skipped": 6.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "legacy",
+   "seed": 3,
+   "rc": 0,
+   "sec": 12.9,
+   "spent": 2934.3,
+   "calls": 46,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  },
+  {
+   "score": 440,
+   "max": 440,
+   "wrong": 0,
+   "answered_infeasible": 1,
+   "infeasible": 20.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "ok": 18.0,
+     "reward": 107.0,
+     "infeasible": 7.0,
+     "inf_skipped": 7.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 21.0,
+     "reward": 113.0,
+     "infeasible": 4.0,
+     "inf_skipped": 3.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "ok": 21.0,
+     "reward": 119.0,
+     "infeasible": 4.0,
+     "inf_skipped": 4.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "ok": 20.0,
+     "reward": 101.0,
+     "infeasible": 5.0,
+     "inf_skipped": 5.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "baseline",
+   "seed": 4,
+   "rc": 0,
+   "sec": 14.8,
+   "spent": 4891.2,
+   "calls": 62,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  },
+  {
+   "score": 434,
+   "max": 440,
+   "wrong": 1,
+   "answered_infeasible": 1,
+   "infeasible": 20.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "ok": 18.0,
+     "reward": 107.0,
+     "infeasible": 7.0,
+     "inf_skipped": 7.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 20.0,
+     "reward": 107.0,
+     "infeasible": 4.0,
+     "inf_skipped": 3.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "ok": 21.0,
+     "reward": 119.0,
+     "infeasible": 4.0,
+     "inf_skipped": 4.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "ok": 20.0,
+     "reward": 101.0,
+     "infeasible": 5.0,
+     "inf_skipped": 5.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "legacy",
+   "seed": 4,
+   "rc": 0,
+   "sec": 12.4,
+   "spent": 4059.2,
+   "calls": 61,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  },
+  {
+   "score": 432,
+   "max": 437,
+   "wrong": 1,
+   "answered_infeasible": 0,
+   "infeasible": 21.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "ok": 22.0,
+     "reward": 133.0,
+     "infeasible": 3.0,
+     "inf_skipped": 3.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 22.0,
+     "reward": 120.0,
+     "infeasible": 3.0,
+     "inf_skipped": 3.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "ok": 15.0,
+     "reward": 77.0,
+     "infeasible": 9.0,
+     "inf_skipped": 9.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "infeasible": 6.0,
+     "inf_skipped": 6.0,
+     "ok": 19.0,
+     "reward": 102.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "baseline",
+   "seed": 5,
+   "rc": 0,
+   "sec": 12.0,
+   "spent": 3048.6,
+   "calls": 48,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  },
+  {
+   "score": 437,
+   "max": 437,
+   "wrong": 0,
+   "answered_infeasible": 0,
+   "infeasible": 21.0,
+   "per_type": {
+    "coding": {
+     "n": 25.0,
+     "ok": 22.0,
+     "reward": 133.0,
+     "infeasible": 3.0,
+     "inf_skipped": 3.0,
+     "unanswered_feasible": 0.0
+    },
+    "data_analysis": {
+     "n": 25.0,
+     "ok": 22.0,
+     "reward": 120.0,
+     "infeasible": 3.0,
+     "inf_skipped": 3.0,
+     "unanswered_feasible": 0.0
+    },
+    "math": {
+     "n": 25.0,
+     "ok": 16.0,
+     "reward": 82.0,
+     "infeasible": 9.0,
+     "inf_skipped": 9.0,
+     "unanswered_feasible": 0.0
+    },
+    "search": {
+     "n": 25.0,
+     "infeasible": 6.0,
+     "inf_skipped": 6.0,
+     "ok": 19.0,
+     "reward": 102.0,
+     "unanswered_feasible": 0.0
+    }
+   },
+   "strategy": "legacy",
+   "seed": 5,
+   "rc": 0,
+   "sec": 11.7,
+   "spent": 3090.8,
+   "calls": 48,
+   "plan_cost": 0,
+   "oj_share": 0.0
+  }
+ ]
+}

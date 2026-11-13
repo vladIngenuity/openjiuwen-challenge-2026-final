@@ -1,0 +1,50 @@
+name: PR18 offline validation
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      matrix:
+        python: ['3.12', '3.14']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '${{ matrix.python }}'
+      - name: Install Linux isolation library
+        run: sudo apt-get update && sudo apt-get install -y libseccomp2
+      - name: Install pinned runtime for Python 3.12 integration tests
+        if: matrix.python == '3.12'
+        run: python -m pip install -r requirements.txt -c constraints.txt
+      - name: Synthetic regressions only, empty environment
+        run: env -i PATH="$PATH" PYTHONPATH=. HARNESS_ISOLATION=strict python -m unittest discover -s tests -v
+      - name: Paired scheduler ablation (mock reward, 3 seeds)
+        if: github.head_ref == 'vlad/online-neural-mlp' && matrix.python == '3.12'
+        env:
+          HARNESS_BENCHMARK_STRESS: "1"
+          HARNESS_STRESS_SKIP_DETERMINISTIC: "1"
+          HARNESS_TIME_LIMIT: "900"
+        run: |
+          python tools/compare.py \
+            --mode mock \
+            --seeds 301,302,303 \
+            --n 60 \
+            --budget 4800 \
+            --noise 0.25 \
+            --infeasible 0.25 \
+            --strategies random,baseline,marginal_action,online_calibration,online_cost_only,online_mlp \
+            --out docs/research/mock/online_mlp_holdout_ci.md
+      - name: Upload scored ablation results
+        if: always() && github.head_ref == 'vlad/ablation-qwen-preflight' && matrix.python == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: online-mlp-holdout-pr
+          path: |
+            docs/research/mock/online_mlp_holdout_ci.md
+            docs/research/mock/online_mlp_holdout_ci.json
+          if-no-files-found: warn

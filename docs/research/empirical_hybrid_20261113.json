@@ -1,0 +1,143 @@
+{
+  "scope": {
+    "paired_tasks": 272,
+    "completed_reason_shards": 68,
+    "episodes": 2000,
+    "tasks_per_episode": 100,
+    "budget": 100000.0,
+    "seed": 20261113
+  },
+  "warning": "Development replay of historical multi-call strategies; local Coding tests are not official hidden correctness, this is not a live bounded-policy result, and the replay does not estimate the new endgame verification phase.",
+  "categories": [
+    {
+      "category": "math",
+      "tasks": 80,
+      "reason": {
+        "reward": 272,
+        "correct": 56,
+        "cost": 51722.2,
+        "mean_cost": 646.5
+      },
+      "fast": {
+        "reward": 224,
+        "correct": 49,
+        "cost": 37786.6,
+        "mean_cost": 472.3
+      },
+      "reason_only_wins": 11,
+      "fast_only_wins": 4
+    },
+    {
+      "category": "search",
+      "tasks": 32,
+      "reason": {
+        "reward": 114,
+        "correct": 23,
+        "cost": 6659.8,
+        "mean_cost": 208.1
+      },
+      "fast": {
+        "reward": 110,
+        "correct": 23,
+        "cost": 1275.0,
+        "mean_cost": 39.8
+      },
+      "reason_only_wins": 1,
+      "fast_only_wins": 1
+    },
+    {
+      "category": "data_analysis",
+      "tasks": 80,
+      "reason": {
+        "reward": 248,
+        "correct": 44,
+        "cost": 67467.2,
+        "mean_cost": 843.3
+      },
+      "fast": {
+        "reward": 329,
+        "correct": 59,
+        "cost": 41900.3,
+        "mean_cost": 523.8
+      },
+      "reason_only_wins": 0,
+      "fast_only_wins": 15
+    },
+    {
+      "category": "coding",
+      "tasks": 80,
+      "reason": {
+        "reward": 184,
+        "correct": 32,
+        "cost": 47234.5,
+        "mean_cost": 590.4
+      },
+      "fast": {
+        "reward": 167,
+        "correct": 30,
+        "cost": 40567.3,
+        "mean_cost": 507.1
+      },
+      "reason_only_wins": 5,
+      "fast_only_wins": 3
+    }
+  ],
+  "policies": [
+    {
+      "policy": "all_fast",
+      "mean_reward": 311.43,
+      "reward_p05": 273.0,
+      "reward_p95": 353.0,
+      "mean_spent": 38576.7,
+      "mean_completed": 100,
+      "reward_delta_vs_fast": 0.0,
+      "median_delta_vs_fast": 0.0,
+      "delta_p05": 0.0,
+      "delta_p95": 0.0,
+      "win_rate_vs_fast": 0.0,
+      "loss_rate_vs_fast": 0.0
+    },
+    {
+      "policy": "all_reason",
+      "mean_reward": 309.86,
+      "reward_p05": 269.0,
+      "reward_p95": 351.0,
+      "mean_spent": 57303.7,
+      "mean_completed": 100,
+      "reward_delta_vs_fast": -1.57,
+      "median_delta_vs_fast": -2.0,
+      "delta_p05": -31.0,
+      "delta_p95": 28.0,
+      "win_rate_vs_fast": 0.442,
+      "loss_rate_vs_fast": 0.538
+    },
+    {
+      "policy": "math_reason",
+      "mean_reward": 326.51,
+      "reward_p05": 285.0,
+      "reward_p95": 368.0,
+      "mean_spent": 42991.8,
+      "mean_completed": 100,
+      "reward_delta_vs_fast": 15.09,
+      "median_delta_vs_fast": 15.0,
+      "delta_p05": -5.0,
+      "delta_p95": 36.0,
+      "win_rate_vs_fast": 0.884,
+      "loss_rate_vs_fast": 0.098
+    },
+    {
+      "policy": "math_coding_reason",
+      "mean_reward": 331.92,
+      "reward_p05": 291.0,
+      "reward_p95": 375.0,
+      "mean_spent": 45112.7,
+      "mean_completed": 100,
+      "reward_delta_vs_fast": 20.49,
+      "median_delta_vs_fast": 20.0,
+      "delta_p05": -3.0,
+      "delta_p95": 45.0,
+      "win_rate_vs_fast": 0.911,
+      "loss_rate_vs_fast": 0.0755
+    }
+  ]
+}

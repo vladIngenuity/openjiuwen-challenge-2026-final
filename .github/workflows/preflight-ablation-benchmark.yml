@@ -1,0 +1,48 @@
+name: Preflight and marginal ablations (mock)
+
+on:
+  push:
+    branches:
+      - vlad/ablation-qwen-preflight
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Unit tests
+        run: |
+          python -m unittest discover -s tests -p 'test_preflight_ablation.py' -v
+          python -m unittest discover -s tests -p 'test_random_baseline.py' -v
+      - name: Paired scored mock stress (fixed holdout budget)
+        env:
+          HARNESS_BENCHMARK_STRESS: "1"
+          HARNESS_STRESS_SKIP_DETERMINISTIC: "1"
+          HARNESS_TIME_LIMIT: "900"
+        run: |
+          python tools/compare.py \
+            --mode mock \
+            --seeds 201,202,203 \
+            --n 60 \
+            --budget 4800 \
+            --noise 0.25 \
+            --infeasible 0.25 \
+            --strategies random,baseline,marginal_action,marginal_no_penalty,marginal_soft_penalty,online_calibration,online_cost_only,qwen_preflight \
+            --out docs/research/mock/preflight_ablation_ci.md
+      - name: Upload scored results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: preflight-ablation-ci
+          path: |
+            docs/research/mock/preflight_ablation_ci.md
+            docs/research/mock/preflight_ablation_ci.json
+          if-no-files-found: warn

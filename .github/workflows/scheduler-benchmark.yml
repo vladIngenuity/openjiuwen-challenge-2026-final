@@ -1,0 +1,50 @@
+name: Experimental scheduler comparison (mock only)
+
+on:
+  push:
+    branches:
+      - vlad/experiment-online-calibration
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:
+        budget: [1500, 6000]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Linux isolation dependency
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq libseccomp2
+      - name: Compare on identical seeded tasks (mock, not real Qwen)
+        env:
+          HARNESS_ISOLATION: auto
+          HARNESS_TIME_LIMIT: "90"
+          HARNESS_DET_PHASE_SECONDS: "10"
+          HARNESS_DET_TASK_SECONDS: "5"
+        run: |
+          python tools/compare.py \
+            --strategies baseline,marginal_action,online_calibration \
+            --seeds 71,72 \
+            --n 12 \
+            --mode mock \
+            --budget "${{ matrix.budget }}" \
+            --noise 0.15 \
+            --out "docs/research/mock/compare_three_${{ matrix.budget }}.md"
+      - name: Upload comparison reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: scheduler-mock-${{ matrix.budget }}
+          path: |
+            docs/research/mock/compare_three_*.md
+            docs/research/mock/compare_three_*.json
+          if-no-files-found: warn
